@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Boussole — Histoire · Géographie · EMC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1B2A4A;
+    --ink-soft: #2F4266;
+    --parchment: #EDE3C8;
+    --parchment-dark: #E1D3AC;
+    --paper-line: #C9B98A;
+    --gold: #B8862F;
+    --sage: #5C7A5E;
+    --sage-dark: #3F5941;
+    --terracotta: #B24A3C;
+    --terracotta-dark: #8F3A2F;
+    --text: #2A241D;
+    --text-soft: #5A5142;
+    --white: #FBF8F0;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Public Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--parchment);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(184,134,47,0.06), transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(92,122,94,0.07), transparent 45%);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+
+  header.masthead {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .compass {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    display: block;
+  }
+
+  .compass circle,
+  .compass path,
+  .compass line {
+    stroke: var(--ink);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+
+  h1.title {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-soft);
+    max-width: 46ch;
+    margin: 0 auto;
+  }
+
+  /* ---------- ROUTE / TRAIL ---------- */
+
+  .route {
+    max-width: 1000px;
+    margin: 3rem auto 1rem;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+
+  .route-line {
+    position: absolute;
+    top: 46px;
+    left: 8%;
+    right: 8%;
+    height: 0;
+    border-top: 2px dashed var(--paper-line);
+    z-index: 0;
+  }
+
+  .route-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .waypoint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .waypoint-marker {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+  }
+
+  .waypoint[data-level="6e"] .waypoint-marker { border-color: var(--sage-dark); color: var(--sage-dark); }
+  .waypoint[data-level="4e"] .waypoint-marker { border-color: var(--gold); color: var(--gold); }
+  .waypoint[data-level="3e"] .waypoint-marker { border-color: var(--terracotta-dark); color: var(--terracotta-dark); }
+
+  .waypoint-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  /* ---------- CARDS (PLATES) ---------- */
+
+  main.plates {
+    max-width: 1000px;
+    margin: 0.5rem auto 4rem;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  .plate {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 2px;
+    padding: 1.75rem 1.5rem 1.5rem;
+    position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .plate::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+  }
+
+  .plate[data-level="6e"]::before { background: var(--sage-dark); }
+  .plate[data-level="4e"]::before { background: var(--gold); }
+  .plate[data-level="3e"]::before { background: var(--terracotta-dark); }
+
+  .plate:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(27,42,74,0.1);
+  }
+
+  .plate-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+
+  .plate-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--ink);
+  }
+
+  .plate-count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-soft);
+  }
+
+  .plate-tagline {
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    margin-bottom: 1.1rem;
+  }
+
+  ul.resources {
+    list-style: none;
+    margin: 0 0 1.1rem;
+    padding: 0;
+    border-top: 1px solid var(--parchment-dark);
+  }
+
+  ul.resources li {
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  ul.resources a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.1rem;
+    text-decoration: none;
+    font-size: 0.92rem;
+    color: var(--text);
+    transition: color 0.15s ease, padding-left 0.15s ease;
+  }
+
+  ul.resources a:hover {
+    color: var(--ink);
+    padding-left: 0.3rem;
+  }
+
+  ul.resources a::before {
+    content: "→";
+    font-family: var(--font-mono);
+    color: var(--paper-line);
+    flex-shrink: 0;
+  }
+
+  ul.resources a:hover::before {
+    color: var(--gold);
+  }
+
+  .res-type {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    flex-shrink: 0;
+  }
+
+  .plate-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+  }
+
+  /* ---------- FOOTER ---------- */
+
+  footer {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    text-align: center;
+    border-top: 1px solid var(--paper-line);
+    color: var(--text-soft);
+    font-size: 0.85rem;
+  }
+
+  footer .updated {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    margin-top: 0.4rem;
+    color: var(--text-soft);
+    opacity: 0.8;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+
+  @media (max-width: 760px) {
+    .route-line { display: none; }
+    .route-grid,
+    main.plates {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .plate { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <svg class="compass" viewBox="0 0 64 64" fill="none" stroke-width="1.4">
+    <circle cx="32" cy="32" r="26"/>
+    <line x1="32" y1="8" x2="32" y2="16"/>
+    <line x1="32" y1="48" x2="32" y2="56"/>
+    <line x1="8" y1="32" x2="16" y2="32"/>
+    <line x1="48" y1="32" x2="56" y2="32"/>
+    <path d="M32 20 L38 32 L32 44 L26 32 Z" fill="#B8862F" stroke="none"/>
+  </svg>
+  <div class="eyebrow">Collège · Ressources pédagogiques</div>
+  <h1 class="title">La Boussole</h1>
+  <p class="subtitle">Histoire, Géographie et EMC — tous les cours, fiches et documents, classés par niveau. Un clic suffit pour trouver ce qu'il vous faut.</p>
+</header>
+
+<nav class="route" aria-label="Niveaux">
+  <div class="route-line" aria-hidden="true"></div>
+  <div class="route-grid">
+    <a class="waypoint" data-level="6e" href="#sixieme" style="text-decoration:none;">
+      <span class="waypoint-marker">1</span>
+      <span class="waypoint-label">6e</span>
+    </a>
+    <a class="waypoint" data-level="4e" href="#quatrieme" style="text-decoration:none;">
+      <span class="waypoint-marker">2</span>
+      <span class="waypoint-label">4e</span>
+    </a>
+    <a class="waypoint" data-level="3e" href="#troisieme" style="text-decoration:none;">
+      <span class="waypoint-marker">3</span>
+      <span class="waypoint-label">3e</span>
+    </a>
+  </div>
+</nav>
+
+<main class="plates">
+
+  <!-- ===== 6e ===== -->
+  <section class="plate" id="sixieme" data-level="6e">
+    <div class="plate-head">
+      <span class="plate-title">6e</span>
+      <span class="plate-count">3 docs</span>
+    </div>
+    <p class="plate-tagline">Des débuts de l'humanité aux premiers empires.</p>
+    <ul class="resources">
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_1" target="_blank" rel="noopener">Thème 1 — Cours complet <span class="res-type">PDF</span></a></li>
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_2" target="_blank" rel="noopener">Thème 1 — Fiche de révision <span class="res-type">PDF</span></a></li>
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_3" target="_blank" rel="noopener">Thème 2 — Cours complet <span class="res-type">PDF</span></a></li>
+    </ul>
+    <a class="plate-more" href="LIEN_DOSSIER_NEXTCLOUD_6E" target="_blank" rel="noopener">Voir tout le dossier 6e →</a>
+  </section>
+
+  <!-- ===== 4e ===== -->
+  <section class="plate" id="quatrieme" data-level="4e">
+    <div class="plate-head">
+      <span class="plate-title">4e</span>
+      <span class="plate-count">2 docs</span>
+    </div>
+    <p class="plate-tagline">Révolutions, industrialisation, bouleversements du monde.</p>
+    <ul class="resources">
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_4" target="_blank" rel="noopener">Thème 1 — Cours complet <span class="res-type">PDF</span></a></li>
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_5" target="_blank" rel="noopener">Thème 1 — Exercices <span class="res-type">PDF</span></a></li>
+    </ul>
+    <a class="plate-more" href="LIEN_DOSSIER_NEXTCLOUD_4E" target="_blank" rel="noopener">Voir tout le dossier 4e →</a>
+  </section>
+
+  <!-- ===== 3e ===== -->
+  <section class="plate" id="troisieme" data-level="3e">
+    <div class="plate-head">
+      <span class="plate-title">3e</span>
+      <span class="plate-count">3 docs</span>
+    </div>
+    <p class="plate-tagline">XXe siècle, guerres totales, préparation au brevet.</p>
+    <ul class="resources">
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_6" target="_blank" rel="noopener">L'Europe, théâtre des guerres totales — Synthèse <span class="res-type">PDF</span></a></li>
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_7" target="_blank" rel="noopener">Fiche cours-noyau <span class="res-type">PDF</span></a></li>
+      <li><a href="LIEN_PARTAGE_NEXTCLOUD_8" target="_blank" rel="noopener">Annales DNB corrigées <span class="res-type">Dossier</span></a></li>
+    </ul>
+    <a class="plate-more" href="LIEN_DOSSIER_NEXTCLOUD_3E" target="_blank" rel="noopener">Voir tout le dossier 3e →</a>
+  </section>
+
+</main>
+
+<footer>
+  <p>Une question, un lien qui ne fonctionne pas ? Signalez-le en cours ou par mail.</p>
+  <div class="updated">Dernière mise à jour : À COMPLÉTER</div>
+</footer>
+
+</body>
+</html>
